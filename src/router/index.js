@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const router = new Router({
+  mode: "history",
   routes: [{
     path: '/',
     name: 'home',
@@ -12,6 +13,10 @@ const router = new Router({
     path: '/analysis',
     name: 'analysis',
     component: resolve => require(['@/views/dataAnalysis.vue'],resolve)
+  },{
+    path: '/school',
+    name: 'school',
+    component: resolve => require(['@/views/school.vue'],resolve)
   }]
 })
 

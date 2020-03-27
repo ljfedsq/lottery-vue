@@ -11,5 +11,16 @@ module.exports = {
             'plugins': '@/plugins',
           }
         }
+  },
+  devServer: {
+    proxy: {
+      "/schoolApi": {
+        target: "http://s1.shanghaicity.openservice.kankanews.com",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/schoolApi": ""
+        }
+      }
+    }
   }
 }

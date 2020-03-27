@@ -39,7 +39,7 @@ class crawlData {
         _self.page = result.totalPage;
         _self.dataArr = _self.dataArr.concat(result.dataList);
         if(_self.page == curPage) {
-          fs.writeFile("./cache/data.json",JSON.stringify(_self.dataArr),{"flag":"a"},function(err){
+          fs.writeFile("./cache/data.json",JSON.stringify(_self.dataArr),function(err){
             if(err) throw err;
             console.log("写入成功！");
           })
