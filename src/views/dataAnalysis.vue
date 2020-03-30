@@ -31,7 +31,6 @@ export default {
         const blue = item.kjtnum
         data[blue-1].count++
       })
-      console.log(data)
       const barPlot = new Bar("chart1", {
         title: {
           visible: true,

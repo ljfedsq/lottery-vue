@@ -10,6 +10,10 @@ const router = new Router({
     name: 'home',
     component: resolve => require(['@/views/home.vue'],resolve)
   },{
+    path: '/lottery',
+    name: 'lottery',
+    component: resolve => require(['@/views/lottery.vue'],resolve)
+  },{
     path: '/analysis',
     name: 'analysis',
     component: resolve => require(['@/views/dataAnalysis.vue'],resolve)
@@ -17,6 +21,10 @@ const router = new Router({
     path: '/school',
     name: 'school',
     component: resolve => require(['@/views/school.vue'],resolve)
+  },{
+    path: '/schoolMap',
+    name: 'schoolMap',
+    component: resolve => require(['@/views/schoolMap.vue'],resolve)
   }]
 })
 
