@@ -1,7 +1,9 @@
 <template>
   <div class="lottery">
     <span>查询日期：</span><el-input v-model="search" placeholder="输入日期"/>
-    <el-button class="right-btn" @click="gotoAnalysis" type="primary">蓝球分析</el-button>
+    <div>
+     <el-button class="right-btn" @click="gotoAnalysis" type="primary">蓝球分析</el-button>
+    </div>
    <!-- <div class="filter-panel">
       <span class="date">{{date}}</span>
       <van-button @click="showCalendar = true">选择日期</van-button>
@@ -13,16 +15,17 @@
       :min-date="minDate"	
       @confirm="onConfirm" /> -->
     <el-table :data="dataList.filter(data => !search || data.kjdate.toLowerCase().includes(search.toLowerCase()))" height="400" :default-sort = "{prop: 'kjIssue', order: 'descending'}">
-      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column type="index" width="45"></el-table-column>
       <el-table-column label="期号" prop="kjIssue" sortable></el-table-column>
-      <el-table-column label="日期" prop="kjdate" sortable></el-table-column>
-      <el-table-column label="红球号码" prop="kjznum"></el-table-column>
-      <el-table-column label="蓝球球号码" prop="kjtnum"></el-table-column>
+      <el-table-column label="日期" width="100" prop="kjdate" sortable></el-table-column>
+      <el-table-column label="红球" prop="kjznum"></el-table-column>
+      <el-table-column label="蓝球" prop="kjtnum"></el-table-column>
     </el-table>
   </div>
 </template>
 <script>
 let today = new Date();
+import axios from "axios";
 const weekago = today.setTime(today.getTime()-7*24*60*60*1000);
 export default {
   name: 'Lottery',
@@ -40,13 +43,17 @@ export default {
   data() {
     return {
       search:"",
+      currentPage: 1,
+      totalPage: 1,
       showCalendar: false,
       date: `${this.formatDate(new Date(weekago))} - ${this.formatDate(new Date())}`,
-      dataList: require("@/cache/data.json")
+      dataList: []
+      // dataList: require("@/cache/data.json")
     }
   },
   mounted() {
-    
+    this.watchScroll()
+    this.getData()
   },
   methods: {
     formatDate(date) {
@@ -59,6 +66,44 @@ export default {
     },
     gotoAnalysis(){
       this.$router.push({name:'analysis'})
+    },
+    getData() {
+      const url = '/clienth5.do';
+      axios({
+        method: 'get',
+        url,
+        params: {
+          lottery: "FC_SSQ",
+          pageSize: 20,
+          pageNo: this.currentPage,
+          transactionType: 300301,
+          src: "0000100001%7C6000003060"
+        }   
+      }).then(res => {
+        if(res.data) {
+          const result = {...res.data}
+          this.dataList = this.dataList.concat(result.dataList)
+          this.totalPage = result.totalPage
+        }
+       
+      })
+      .catch( (error) => {
+        console.log(error);
+      });
+
+    },
+    watchScroll() {
+      let dom = document.querySelector(".el-table__body-wrapper");
+      const self = this;
+      dom.addEventListener("scroll", function() {
+        const distance = dom.scrollHeight - dom.scrollTop - dom.clientHeight;
+        if(distance <= 0) {
+          if(self.currentPage < self.totalPage) {
+            self.currentPage++;
+            self.getData()
+          }
+        }
+      })
     }
   }
 }
@@ -73,8 +118,9 @@ export default {
       float right
   .el-input 
     display inline-block
-    width 300px
+    width 200px
   .right-btn
     float right
+    margin 10px 0
 </style>
 

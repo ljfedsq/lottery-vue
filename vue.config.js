@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath:'./',
+  publicPath:'/',
   configureWebpack:{
       resolve: {
           alias: {
@@ -14,12 +14,19 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      "/schoolApi": {
+      "/searchschool": {
         target: "http://s1.shanghaicity.openservice.kankanews.com",
         changeOrigin: true,
-        pathRewrite: {
-          "^/schoolApi": ""
-        }
+        // pathRewrite: {
+        //   "^/searchschool": ""
+        // }
+      },
+      "/clienth5.do": {
+        target: "http://m.zhcw.com",
+        changeOrigin: true,
+        // pathRewrite: {
+        //   "^/searchschool": ""
+        // }
       }
     }
   }
